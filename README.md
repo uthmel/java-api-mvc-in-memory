@@ -35,8 +35,8 @@ This approach to designing a system allows us to keep things organised and modul
 3. Open the project in IntelliJ
 4. Take a look in the `bagels` package to see an example of how an API might be structured using the MVC approach
 5. Create a `Main` class in the `com.booleanuk.api` package using your previous exercise as a guide
-6. Implement this API spec following an MVC approach
+6. [Implement this API spec following an MVC approach](https://boolean-uk.github.io/java-api-mvc-in-memory/)
 
 ## Extensions
 
-This API spec contains some additions to the core spec, including adding error responses under certain scenarios and allowing clients to optionally filter products by category.
+[This API spec](https://boolean-uk.github.io/java-api-mvc-in-memory/extensions) contains some additions to the core spec, including adding error responses under certain scenarios and allowing clients to optionally filter products by category.
