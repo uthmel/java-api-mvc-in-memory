@@ -26,23 +26,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        400:
+          description: Price must be an integer, something else was provided. / Product with provided name already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     get:
       tags:
         - products
       summary: Get all products
       description: Get all of the products from our list
+      parameters:
+        - name: category
+          in: query
+          description: Find all products with a given category (case insensitive). If no category parameter is provided, return all products.
+          schema:
+            type: string
       responses:
         200:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AllProducts'
+        404:
+          description: No products of the provided category were found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /products/{id}:
     get:
       tags:
         - products
       summary: Get a product
-      description: Get a product by ID
+      description: Get a product by ID. Respond with a 404 error message if that product doesn't exist
       parameters:
         - name: id
           in: path
@@ -56,6 +74,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
       tags:
         - products
@@ -79,6 +103,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        400:
+          description: Price must be an integer, something else was provided. / Product with provided name already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - products
@@ -97,6 +133,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -132,3 +174,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Product'
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Not found."
