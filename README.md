@@ -33,9 +33,8 @@ This approach to designing a system allows us to keep things organised and modul
 1. Fork this repository
 2. Clone your fork to your machine
 3. Open the project in IntelliJ
-4. Take a look in the `bagels` package to see an example of how an API might be structured using the MVC approach
-5. Create a `Main` class in the `com.booleanuk.api` package using your previous exercise as a guide
-6. [Implement this API spec following an MVC approach](https://boolean-uk.github.io/java-api-mvc-in-memory/)
+4. Take a look in the `bagels` package to see an example of how an API might be structured using the MVC approach (be aware this example isn't using Spring Boot it is just being used to demonstrate the relationships between the classes).
+5. Create your own Products classes and a `Main` class in the `com.booleanuk.api` package using your previous exercise as a guide along with the Bagels example which will [Implement this API spec following an MVC approach](https://boolean-uk.github.io/java-api-mvc-in-memory/).
 
 ## Extensions
 
