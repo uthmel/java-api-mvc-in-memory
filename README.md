@@ -18,7 +18,10 @@ This is our data layer. It describes what data looks like (e.g. Users, Cars, Pro
 This is what the client interacts with. It could be a HTML page, a terminal output or a JSON response from a RESTful API. With API's, the view (JSON) is a representation of a data model.
 
 ### Controller
-This layer is responsible for translating interactions from the View layer into logic in our program. If a user clicks a button on a view, the controller decides what to do with that action. Consider the scenario below:
+This layer is responsible for translating interactions from the View layer into logic in our program. If a user clicks a button on a view, the controller decides what to do with that action. 
+
+### Example
+Consider the scenario below:
 
 - User clicks on a "Create Product" button in a view
 - A controller class might validate that the user entered a valid product name before telling the Model layer to create the product
