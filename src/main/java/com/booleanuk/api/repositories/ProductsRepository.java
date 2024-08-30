@@ -1,6 +1,7 @@
 package com.booleanuk.api.repositories;
 
 import com.booleanuk.api.models.Product;
+import com.booleanuk.api.models.ProductNotFoundException;
 
 import java.util.ArrayList;
 
@@ -19,18 +20,20 @@ public class ProductsRepository {
         return this.products;
     }
 
-    public Product addProduct(Product newProduct) {
-        this.products.add(newProduct);
-        return newProduct;
+    public Product createProduct(Product newProduct) {
+        if (products.stream().anyMatch(p -> p.getName().equals(newProduct.getName()))) {
+            throw new ProductNotFoundException.ProductAlreadyExistsException("Product with name " + newProduct.getName() + " already exists");
+        }
+        Product product = new Product(newProduct.getName(), newProduct.getCategory(), newProduct.getPrice());
+        products.add(product);
+        return product;
     }
 
     public Product getOne(int id) {
-        for (Product product : this.products) {
-            if (product.getId()==id) {
-                return product;
-            }
-        }
-        return null;
+        return products.stream()
+                .filter(product -> product.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found"));
     }
 
     public Product updateProduct(int id, Product updatedProduct) {

@@ -24,7 +24,7 @@ public class ProductsController {
 
     @PostMapping
     public Product createProduct(@RequestBody Product newProduct) {
-        return this.theProducts.addProduct(newProduct);
+        return this.theProducts.createProduct(newProduct);
     }
 
     @GetMapping("{id}")
