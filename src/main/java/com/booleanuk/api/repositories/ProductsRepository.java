@@ -37,25 +37,27 @@ public class ProductsRepository {
     }
 
     public Product updateProduct(int id, Product updatedProduct) {
-        ArrayList<Product> allProducts = getAll();
-
-        for (Product product : allProducts) {
+        for (Product product : products) {
             if (product.getId() == id) {
+                if (products.stream().anyMatch(p -> p.getName().equals(updatedProduct.getName()) && p.getId() != id)) {
+                    throw new ProductNotFoundException.ProductAlreadyExistsException("Product with name " + updatedProduct.getName() + " already exists");
+                }
                 product.setName(updatedProduct.getName());
                 product.setCategory(updatedProduct.getCategory());
                 product.setPrice(updatedProduct.getPrice());
                 return product;
             }
         }
-        return null;
-
+        throw new ProductNotFoundException("Product with ID " + id + " not found");
     }
 
-    public Product deleteProduct(int id) {
+    public Boolean deleteProduct(int id) {
         ArrayList<Product> allProducts = getAll();
         allProducts.removeIf(product -> product.getId() == id);
         return null;
     }
+
+
 
 
 }

@@ -1,8 +1,11 @@
 package com.booleanuk.api.controllers;
 
 import com.booleanuk.api.models.Product;
+import com.booleanuk.api.models.ProductNotFoundException;
 import com.booleanuk.api.repositories.ProductsRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 
@@ -18,28 +21,58 @@ public class ProductsController {
     }
 
     @GetMapping
-    public ArrayList<Product> getAllProducts(){
-        return this.theProducts.getAll();
+    public ArrayList<Product> getAllProducts(@RequestParam(required = false) String category) {
+        ArrayList<Product> products = (category == null) ? this.theProducts.getAll() : filterByCategory(category);
+        if (products.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No products found for the given category");
+        }
+        return products;
+    }
+
+    private ArrayList<Product> filterByCategory(String category) {
+        ArrayList<Product> filteredProducts = new ArrayList<>();
+        for (Product product : this.theProducts.getAll()) {
+            if (product.getCategory().equalsIgnoreCase(category)) {
+                filteredProducts.add(product);
+            }
+        }
+        return filteredProducts;
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product newProduct) {
-        return this.theProducts.createProduct(newProduct);
+        try {
+            return this.theProducts.createProduct(newProduct);
+        } catch (ProductNotFoundException.ProductAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @GetMapping("{id}")
     public Product getSpecificProduct(@PathVariable int id) {
-        return this.theProducts.getOne(id);
+        try {
+            return this.theProducts.getOne(id);
+        } catch (ProductNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PutMapping("{id}")
     public Product updateProduct(@PathVariable int id, @RequestBody Product updateProduct) {
-        return theProducts.updateProduct(id, updateProduct);
+        try {
+            return this.theProducts.updateProduct(id, updateProduct);
+        } catch (ProductNotFoundException | ProductNotFoundException.ProductAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
-    public Product deleteProduct(@PathVariable int id) {
-        return theProducts.deleteProduct(id);
+    public void deleteProduct(@PathVariable int id) {
+        boolean deleted = this.theProducts.deleteProduct(id);
+        if (!deleted) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product with ID " + id + " not found");
+        }
     }
 
 
